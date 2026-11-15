@@ -1,0 +1,13 @@
+<%- include('../partials/inicio') %>
+<a class="voltar" href="/tarefas/<%= tarefa.id %>">← Voltar para a tarefa</a>
+<div class="cabecalho-pagina"><div><p class="sobretitulo">CONFIRMAÇÃO DE EXCLUSÃO</p><h1>Excluir tarefa</h1><p class="subtitulo">Confira a atividade antes de continuar.</p></div></div>
+<section class="painel formulario-painel">
+  <div class="aviso atencao">Esta ação remove a tarefa e não pode ser desfeita.</div>
+  <h2 class="detalhes-titulo"><%= tarefa.titulo %></h2><p class="subtitulo"><%= tarefa.disciplina %> · Tarefa #<%= tarefa.id %></p>
+  <% if (erro) { %><div class="aviso erro" role="alert"><%= erro %></div><% } %>
+  <form method="post" action="/tarefas/<%= tarefa.id %>/excluir">
+    <label class="confirmacao"><input type="checkbox" name="confirmacao" value="sim" required> Confirmo que desejo excluir esta tarefa.</label>
+    <div class="grupo-botoes"><a class="botao secundario" href="/tarefas/<%= tarefa.id %>">Cancelar</a><button class="botao perigo" type="submit">Sim, excluir tarefa</button></div>
+  </form>
+</section>
+<%- include('../partials/fim') %>

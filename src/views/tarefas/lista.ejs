@@ -1,0 +1,32 @@
+<%- include('../partials/inicio') %>
+<div class="cabecalho-pagina">
+  <div><p class="sobretitulo">SEU PLANEJAMENTO, EM DIA</p><h1>Minhas tarefas</h1><p class="subtitulo">Acompanhe o que precisa fazer e celebre cada conclusão.</p></div>
+  <a class="botao primario" href="/tarefas/nova"><span aria-hidden="true">+</span> Nova tarefa</a>
+</div>
+<% if (mensagem) { %><div class="aviso sucesso" role="status"><%= mensagem %></div><% } %>
+<section class="resumo" aria-label="Resumo das tarefas">
+  <div class="resumo-card"><span>Total de tarefas</span><strong><%= resumo.total %></strong><small>Tudo em um só lugar</small></div>
+  <div class="resumo-card"><span><i class="bolinha pendente"></i> Pendentes</span><strong><%= resumo.pendentes %></strong><small>Seus próximos passos</small></div>
+  <div class="resumo-card"><span><i class="bolinha concluida"></i> Concluídas</span><strong><%= resumo.concluidas %></strong><small>Mais uma etapa vencida</small></div>
+</section>
+<section class="painel" aria-labelledby="titulo-lista">
+  <div class="painel-topo"><h2 id="titulo-lista">Lista de tarefas</h2><span class="contagem"><%= tarefas.length %> <%= tarefas.length === 1 ? 'tarefa' : 'tarefas' %></span></div>
+  <nav class="filtros" aria-label="Filtrar por status">
+    <% for (const [valor, rotulo] of [['todas','Todas'], ['pendente','Pendentes'], ['concluida','Concluídas']]) { %>
+      <a href="/tarefas?status=<%= valor %>" class="filtro <%= filtro === valor ? 'ativo' : '' %>" <% if (filtro === valor) { %>aria-current="page"<% } %>><%= rotulo %></a>
+    <% } %>
+  </nav>
+  <% if (!tarefas.length) { %>
+    <div class="vazio"><span class="vazio-icone" aria-hidden="true">▤</span><h3><%= resumo.total === 0 ? 'Seu planejamento começa aqui' : 'Nenhuma tarefa neste filtro' %></h3><p><%= resumo.total === 0 ? 'Cadastre sua primeira tarefa e acompanhe suas atividades.' : 'Experimente outro filtro para ver suas tarefas.' %></p><a class="botao secundario" href="<%= resumo.total === 0 ? '/tarefas/nova' : '/tarefas' %>"><%= resumo.total === 0 ? 'Cadastrar primeira tarefa' : 'Ver todas as tarefas' %></a></div>
+  <% } else { %>
+    <div class="tabela-container"><table><thead><tr><th scope="col">Tarefa</th><th scope="col">Disciplina</th><th scope="col">Status</th><th scope="col" class="coluna-acoes">Ações</th></tr></thead>
+      <tbody><% tarefas.forEach(tarefa => { %><tr>
+        <td><a class="titulo-tarefa" href="/tarefas/<%= tarefa.id %>"><%= tarefa.titulo %></a><small class="identificador">#<%= String(tarefa.id).padStart(3, '0') %></small></td>
+        <td><span class="disciplina"><%= tarefa.disciplina %></span></td>
+        <td><span class="status <%= tarefa.status %>"><%= tarefa.status === 'pendente' ? 'Pendente' : 'Concluída' %></span></td>
+        <td><div class="acoes"><a href="/tarefas/<%= tarefa.id %>" aria-label="Ver detalhes de <%= tarefa.titulo %>">Detalhes</a><a href="/tarefas/<%= tarefa.id %>/editar" aria-label="Editar <%= tarefa.titulo %>">Editar</a><% if (tarefa.status === 'pendente') { %><form method="post" action="/tarefas/<%= tarefa.id %>/concluir"><button class="link-acao verde" aria-label="Concluir <%= tarefa.titulo %>">Concluir</button></form><% } %><a class="perigo-texto" href="/tarefas/<%= tarefa.id %>/excluir" aria-label="Excluir <%= tarefa.titulo %>">Excluir</a></div></td>
+      </tr><% }); %></tbody>
+    </table></div>
+  <% } %>
+</section>
+<%- include('../partials/fim') %>

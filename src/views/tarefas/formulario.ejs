@@ -1,0 +1,14 @@
+<%- include('../partials/inicio') %>
+<a class="voltar" href="/tarefas">← Voltar para minhas tarefas</a>
+<div class="cabecalho-pagina"><div><p class="sobretitulo">CADA ATIVIDADE TEM SEU LUGAR</p><h1><%= tituloPagina %></h1><p class="subtitulo"><%= tarefa ? 'Atualize as informações da sua atividade.' : 'Registre uma atividade e organize seus próximos passos.' %></p></div></div>
+<section class="painel formulario-painel">
+  <% if (Object.keys(erros).length) { %><div class="aviso erro" role="alert"><strong>Não foi possível salvar a tarefa.</strong> Revise os campos indicados abaixo.</div><% } %>
+  <form method="post" action="<%= tarefa ? '/tarefas/' + tarefa.id + '/editar' : '/tarefas' %>">
+    <div class="campo"><label for="titulo">Título <span class="obrigatorio">*</span></label><input id="titulo" name="titulo" type="text" required minlength="3" maxlength="100" value="<%= valores.titulo || '' %>" placeholder="Ex.: Desenvolver aplicação com MVC" aria-describedby="titulo-ajuda<%= erros.titulo ? ' titulo-erro' : '' %>" <% if (erros.titulo) { %>aria-invalid="true"<% } %>><small id="titulo-ajuda">Entre 3 e 100 caracteres.</small><% if (erros.titulo) { %><span id="titulo-erro" class="erro-campo"><%= erros.titulo %></span><% } %></div>
+    <div class="campo"><label for="disciplina">Disciplina <span class="obrigatorio">*</span></label><input id="disciplina" name="disciplina" type="text" required minlength="2" maxlength="80" value="<%= valores.disciplina || '' %>" placeholder="Ex.: Tópicos Especiais em Engenharia de Software" aria-describedby="disciplina-ajuda<%= erros.disciplina ? ' disciplina-erro' : '' %>" <% if (erros.disciplina) { %>aria-invalid="true"<% } %>><small id="disciplina-ajuda">Entre 2 e 80 caracteres.</small><% if (erros.disciplina) { %><span id="disciplina-erro" class="erro-campo"><%= erros.disciplina %></span><% } %></div>
+    <div class="campo"><label for="descricao">Descrição <span class="opcional">opcional</span></label><textarea id="descricao" name="descricao" rows="5" maxlength="500" placeholder="Anote instruções ou detalhes da atividade..." aria-describedby="descricao-ajuda<%= erros.descricao ? ' descricao-erro' : '' %>" <% if (erros.descricao) { %>aria-invalid="true"<% } %>><%= valores.descricao || '' %></textarea><small id="descricao-ajuda">Até 500 caracteres.</small><% if (erros.descricao) { %><span id="descricao-erro" class="erro-campo"><%= erros.descricao %></span><% } %></div>
+    <% if (!tarefa) { %><p class="nota">A nova tarefa será cadastrada como <strong>pendente</strong>.</p><% } %>
+    <div class="rodape-formulario"><span class="campos-obrigatorios">* Campos obrigatórios</span><div class="grupo-botoes"><a class="botao secundario" href="/tarefas">Cancelar</a><button class="botao primario" type="submit"><%= tarefa ? 'Salvar alterações' : 'Cadastrar tarefa' %></button></div></div>
+  </form>
+</section>
+<%- include('../partials/fim') %>
